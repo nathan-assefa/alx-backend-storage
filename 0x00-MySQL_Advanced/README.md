@@ -116,7 +116,6 @@ Write a SQL script that creates a table users following these requirements:
 - If the table already exists, your script should not fail
 - Your script can be executed on any database
 
-context:
     bob@dylan:~$ echo "SELECT * FROM users;" | mysql -uroot -p holberton
     Enter password: 
     ERROR 1146 (42S02) at line 1: Table 'holberton.users' doesn't exist
@@ -141,4 +140,122 @@ context:
     1   bob@dylan.com   Bob US
     2   sylvie@dylan.com    Sylvie  CO
     3   john@dylan.com  John    US
+    bob@dylan:~$ 
+
+
+#### 2. Best band ever!                                                               mandatory
+Write a SQL script that ranks country origins of bands, ordered by the number of (non-unique) fans
+
+##### Requirements:
+
+- Import this table dump: metal_bands.sql.zip
+- Column names must be: origin and nb_fans
+- Your script can be executed on any database
+- Context: Calculate/compute something is always power intensive… better to distribute the load!
+
+    bob@dylan:~$ cat metal_bands.sql | mysql -uroot -p holberton
+    Enter password: 
+    bob@dylan:~$ 
+    bob@dylan:~$ cat 2-fans.sql | mysql -uroot -p holberton > tmp_res ; head tmp_res
+    Enter password: 
+    origin  nb_fans
+    USA 99349
+    Sweden  47169
+    Finland 32878
+    United Kingdom  32518
+    Germany 29486
+    Norway  22405
+    Canada  8874
+    The Netherlands 8819
+    Italy   7178
+    bob@dylan:~$ 
+
+
+#### 3. Old school band                                                                    mandatory
+Write a SQL script that lists all bands with Glam rock as their main style, ranked by their longevity
+
+##### Requirements:
+
+- Import this table dump: metal_bands.sql.zip
+- Column names must be: band_name and lifespan (in years until 2022 - please use 2022 instead of YEAR(CURDATE()))
+- You should use attributes formed and split for computing the lifespan
+- Your script can be executed on any database
+    bob@dylan:~$ cat metal_bands.sql | mysql -uroot -p holberton
+    Enter password: 
+    bob@dylan:~$ 
+    bob@dylan:~$ cat 3-glam_rock.sql | mysql -uroot -p holberton 
+    Enter password: 
+    band_name   lifespan
+    Alice Cooper    56
+    Mötley Crüe   34
+    Marilyn Manson  31
+    The 69 Eyes 30
+    Hardcore Superstar  23
+    Nasty Idols 0
+    Hanoi Rocks 0
+    bob@dylan:~$
+
+#### 4. Buy buy buy                                                                            mandatory
+Write a SQL script that creates a trigger that decreases the quantity of an item after adding a new order.
+
+Quantity in the table items can be negative.
+
+Context: Updating multiple tables for one action from your application can generate issue: network disconnection, crash, etc… to keep your data in a good shape, let MySQL do it for you!
+
+    bob@dylan:~$ cat 4-init.sql
+    -- Initial
+    DROP TABLE IF EXISTS items;
+    DROP TABLE IF EXISTS orders;
+
+    CREATE TABLE IF NOT EXISTS items (
+        name VARCHAR(255) NOT NULL,
+        quantity int NOT NULL DEFAULT 10
+    );
+
+    CREATE TABLE IF NOT EXISTS orders (
+        item_name VARCHAR(255) NOT NULL,
+        number int NOT NULL
+    );
+
+    INSERT INTO items (name) VALUES ("apple"), ("pineapple"), ("pear");
+
+    bob@dylan:~$ 
+    bob@dylan:~$ cat 4-init.sql | mysql -uroot -p holberton 
+    Enter password: 
+    bob@dylan:~$ 
+    bob@dylan:~$ cat 4-store.sql | mysql -uroot -p holberton 
+    Enter password: 
+    bob@dylan:~$ 
+    bob@dylan:~$ cat 4-main.sql
+    Enter password: 
+    -- Show and add orders
+    SELECT * FROM items;
+    SELECT * FROM orders;
+
+    INSERT INTO orders (item_name, number) VALUES ('apple', 1);
+    INSERT INTO orders (item_name, number) VALUES ('apple', 3);
+    INSERT INTO orders (item_name, number) VALUES ('pear', 2);
+
+    SELECT "--";
+
+    SELECT * FROM items;
+    SELECT * FROM orders;
+
+    bob@dylan:~$ 
+    bob@dylan:~$ cat 4-main.sql | mysql -uroot -p holberton 
+    Enter password: 
+    name    quantity
+    apple   10
+    pineapple   10
+    pear    10
+    --
+    --
+    name    quantity
+    apple   6
+    pineapple   10
+    pear    8
+    item_name   number
+    apple   1
+    apple   3
+    pear    2
     bob@dylan:~$ 
