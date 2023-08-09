@@ -115,7 +115,6 @@ Write a SQL script that creates a table users following these requirements:
    - country, enumeration of countries: US, CO and TN, never null (= default will be the first element of the enumeration, here US)
 - If the table already exists, your script should not fail
 - Your script can be executed on any database
-
     bob@dylan:~$ echo "SELECT * FROM users;" | mysql -uroot -p holberton
     Enter password: 
     ERROR 1146 (42S02) at line 1: Table 'holberton.users' doesn't exist
