@@ -180,6 +180,7 @@ Write a SQL script that lists all bands with Glam rock as their main style, rank
 - Column names must be: band_name and lifespan (in years until 2022 - please use 2022 instead of YEAR(CURDATE()))
 - You should use attributes formed and split for computing the lifespan
 - Your script can be executed on any database
+
     bob@dylan:~$ cat metal_bands.sql | mysql -uroot -p holberton
     Enter password: 
     bob@dylan:~$ 
