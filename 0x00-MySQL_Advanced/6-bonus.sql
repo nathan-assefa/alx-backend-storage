@@ -5,7 +5,7 @@ DELIMITER //
 CREATE PROCEDURE AddBonus(
 	IN user_id INT,
 	IN project_name VARCHAR(255),
-	IN score FLOAT
+	IN score DECIMAL(5,2)
 )
 BEGIN
     -- Declare a variable to store the project ID
