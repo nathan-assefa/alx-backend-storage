@@ -1,0 +1,12 @@
+-- This file contains trigger
+-- whenever INSERT operation is done to the order table it subtracts quantity from items
+DELIMITER $$
+CREATE TRIGGER decreate_quantity
+AFTER INSERT ON orders
+BEGIN
+	UPDATE items
+	SET quantity = quantity - NEW.number
+	WHERE name = NEW.item_name;
+END;
+$$
+DELIMITER ;

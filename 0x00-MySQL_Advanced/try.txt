@@ -1,0 +1,2 @@
+
+FOR EACH ROW: This further specifies that the trigger should be executed for each individual row affected by the INSERT operation. This is a row-level trigger, meaning the trigger code will execute once for each newly inserted row in the orders table.
