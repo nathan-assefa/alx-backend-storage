@@ -1,7 +1,9 @@
--- creating a user table
--- these are the attributes name, id, email
+-- Make a table
+-- If table exist, you should not fail
 CREATE TABLE IF NOT EXISTS users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(225) NOT NULL,
-    email VARCHAR(225) NOT NULL UNIQUE
+    id INT NOT NULL AUTO_INCREMENT,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    name VARCHAR(255),
+    PRIMARY KEY(id)
 );
+
