@@ -8,17 +8,13 @@ CREATE PROCEDURE AddBonus(
 	IN score FLOAT
 )
 BEGIN
-    -- Declare a variable to store the project ID
     DECLARE project_id INT;
-
     IF (SELECT COUNT(*) FROM projects WHERE name = project_name) = 0
     THEN
         INSERT INTO projects (name) VALUES (project_name);
-    END IF;    
-
+    END IF;
     SET project_id = (SELECT id FROM projects WHERE name = project_name LIMIT 1);
-    -- Insert the correction record
-    INSERT INTO corrections (user_id, project_name, score) VALUES (user_id, project_name, score);
+    INSERT INTO corrections (user_id, project_id, score) VALUES(user_id, project_id, score);
 END;
 //
 DELIMITER ;
