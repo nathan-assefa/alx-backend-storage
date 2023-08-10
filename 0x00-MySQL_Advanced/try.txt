@@ -11,3 +11,12 @@ SHOW PROCEDURE STATUS WHERE Db = 'your_database_name' AND Name = 'procedure_name
 
 **** how to delete the existed database? ******
 DROP PROCEDURE IF EXISTS 'procedure_name';
+
+
+*** how to set variable in mysql terminal? ****
+SET @product_id := 'some_value';
+
+*** how to assign the value to the variable directly within the same query? ****
+SELECT id INTO project_id FROM projects WHERE name = project_name;
+-- this  retrieves the id of a specific project from the projects table based on the provided
+-- +project_name and assigns that value to the project_id variable.
