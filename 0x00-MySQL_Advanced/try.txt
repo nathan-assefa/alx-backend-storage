@@ -1,2 +1,13 @@
 
-FOR EACH ROW: This further specifies that the trigger should be executed for each individual row affected by the INSERT operation. This is a row-level trigger, meaning the trigger code will execute once for each newly inserted row in the orders table.
+FOR EACH ROW: This further specifies that the trigger should be executed for each
+individual row affected by the INSERT operation. This is a row-level trigger, meaning
+the trigger code will execute once for each newly inserted row in the orders table.
+
+**** how see the procedure in the database? *****
+SHOW PROCEDURE STATUS;
+
+**** how to see specific procedure? ******
+SHOW PROCEDURE STATUS WHERE Db = 'your_database_name' AND Name = 'procedure_name';
+
+**** how to delete the existed database? ******
+DROP PROCEDURE IF EXISTS 'procedure_name';
