@@ -7,10 +7,9 @@ DELIMITER //
 CREATE PROCEDURE IF NOT EXISTS ComputeAverageScoreForUser(IN user_id INT)
 BEGIN
     DECLARE user_score DECIMAL(5, 2);
-    DECLARE user_count INT;
 
     -- Calculate the average score and count of user's corrections
-    SELECT AVG(score), COUNT(*) INTO user_score, user_count
+    SELECT AVG(score) INTO user_score
     FROM corrections
     WHERE user_id = user_id;
 
