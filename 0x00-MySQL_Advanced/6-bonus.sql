@@ -1,3 +1,5 @@
+-- implementing stored procedues
+-- updating students score
 DROP PROCEDURE IF EXISTS AddBonus;
 -- Let us define the delimiter thereafter
 DELIMITER $$
@@ -18,8 +20,6 @@ BEGIN
                 INSERT INTO projects(name) VALUES (project_name);
                 SET project_id = LAST_INSERT_ID();
         END IF;
-        -- SET project_id = (SELECT id FROM projects WHERE name = project_name);
-
         INSERT INTO corrections(user_id, project_id, score) VALUES (user_id, project_id, score);
 END;
 $$
