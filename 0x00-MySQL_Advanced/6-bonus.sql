@@ -16,9 +16,9 @@ BEGIN
         -- register the project if it is not registered yet
         IF project_id IS NULL THEN
                 INSERT INTO projects(name) VALUES (project_name);
-                -- SET project_id = LAST_INSERT_ID();
+                SET project_id = LAST_INSERT_ID();
         END IF;
-        SET project_id = (SELECT id FROM projects WHERE name = project_name);
+        -- SET project_id = (SELECT id FROM projects WHERE name = project_name);
 
         INSERT INTO corrections(user_id, project_id, score) VALUES (user_id, project_id, score);
 END;
