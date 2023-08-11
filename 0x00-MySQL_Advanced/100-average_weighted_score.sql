@@ -1,4 +1,6 @@
 -- Compute average to score
+-- This is how we find weighted avarage in general
+-- ===> Weighted Average Score = (Score1 * Weight1 + Score2 * Weight2 + ... + ScoreN * WeightN) / (Weight1 + Weight2 + ... + WeightN)
 DROP PROCEDURE IF EXISTS ComputeAverageWeightedScoreForUser;
 DELIMITER //
 CREATE PROCEDURE ComputeAverageWeightedScoreForUser(
