@@ -1,25 +1,28 @@
 -- implementing stored procedues
 -- updating students score
+-- Let us first drop the stored procedure if exists
 DROP PROCEDURE IF EXISTS AddBonus;
-DELIMITER //
+-- Let us define the delimiter thereafter
+DELIMITER $$
+-- Let us define the stored procedure
 CREATE PROCEDURE AddBonus(
 	IN user_id INT,
-	IN project_name VARCHAR(255),
-	IN score DECIMAL(5,2)
+	IN project_name VARCHAR(225),
+	IN score DECIMAL(5, 2)
 )
+-- Here we begin the stored procedure
 BEGIN
-    -- Declare a variable to store the project ID
-    DECLARE project_id INT;
+	DECLARE project_id INT;
+	-- Let us then check if the project is already registered
+	SELECT id INTO project_id FROM projects where projects.name = project_name;
+	
+	-- register the project if it is not registered yet
+	IF product_id IS NULL THEN
+		INSERT INTO projects(project_name) VALUES (project_name);
+		SET project_id = LAST_INSERT_ID();
+	END IF;
 
-    -- Check if the project already exists in the projects table
-    SELECT id INTO project_id FROM projects WHERE name = project_name;
-
-    -- If no project found, insert it and retrieve the generated ID
-    IF project_id IS NULL THEN
-        INSERT INTO projects (name) VALUES (project_name);
-    END IF;
-    SET project_id = (SELECT id FROM projects WHERE name = project_name);
-    INSERT INTO corrections (user_id, project_id, score) VALUES(user_id, project_id, score);
+	INSERT INTO corrections(user_id, project_id, score) VALUES (user_id, project_id, score);
 END;
-//
+$$
 DELIMITER ;
