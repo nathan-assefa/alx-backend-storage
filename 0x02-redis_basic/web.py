@@ -31,3 +31,6 @@ def get_page(url: str) -> str:
     """Tracking how many times a particular URL was accessed."""
     req = requests.get(url)
     return req.text
+
+if __name__ == '__main__':
+     get_page('http://slowwly.robertomurray.co.uk')
