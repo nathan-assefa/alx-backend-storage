@@ -1,8 +1,19 @@
 #!/usr/bin/env python3
 import redis
 import uuid
+from functools import wraps
 from typing import Union, Callable, Any
 """ Basic operations of redis """
+
+
+def count_calls(method: Callable) -> Callable:
+    ''' implementing decorator '''
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        key = method.__qualname__
+        self._redis.incr(key)
+        return method(self, *args, **kwargs)
+    return wrapper
 
 
 class Cache:
@@ -10,7 +21,8 @@ class Cache:
         """ intializing attributes """
         self._redis = redis.Redis()
         self._redis.flushdb()
-
+    
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """ storing key value pair in the redis serever """
         random_key = str(uuid.uuid4())
