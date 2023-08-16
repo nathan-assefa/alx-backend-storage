@@ -38,6 +38,29 @@ def call_history(method: Callable) -> Callable:
     return wrapper
 
 
+def replay(method: Callable):
+    ''' display the history of calls of a particular function '''
+    key = method.__qualname__
+
+    inputs = f"{method.__qualname__}:inputs"
+    outputs = f"{method.__qualname__}:outputs"
+
+    ''' the method.__self__ attribute refers to the instance
+    on which the method is called. This attribute provides a
+    reference to the instance itself, allowing you to access the
+    attributes and methods of that instance from within the method. '''
+    redis = method.__self__._redis
+    
+    count = redis.get(key).decode("utf-8")
+    print("{} was called {} times:".format(key, count))
+    inputList = redis.lrange(inputs, 0, -1)
+    outputList = redis.lrange(outputs, 0, -1)
+    redis_zipped = list(zip(inputList, outputList))
+    for i in range(len(redis_zipped)):
+        a, b = redis_zipped[i]
+        attr, data = a.decode("utf-8"), b.decode("utf-8")
+        print("{}(*{}) -> {}".format(key, attr, data))
+
 class Cache:
     def __init__(self):
         """ intializing attributes """
