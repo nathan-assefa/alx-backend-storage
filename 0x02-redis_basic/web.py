@@ -1,5 +1,9 @@
+#!/usr/bin/env python3
 import redis
 import requests
+''' Tracking url access '''
+
+
 r = redis.Redis()
 count = 0
 
