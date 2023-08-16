@@ -9,7 +9,7 @@ count = 0
 
 
 def get_page(url: str) -> str:
-    """ tracking how many times a particular URL was accessed """ in the key
+    """ tracking how many times a particular URL was accessed """
     r.set(f"cached:{url}", count)
     resp = requests.get(url)
     r.incr(f"count:{url}")
