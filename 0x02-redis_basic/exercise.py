@@ -17,19 +17,20 @@ def count_calls(method: Callable) -> Callable:
 
 
 def call_history(method: Callable) -> Callable:
-    ''' Adding input and output data in redis list '''
+    ''' Sending datas to redis using RPUSH '''
     @wraps(method)
     def wrapper(self, *args, **kwargs):
+        # let us first compile the keys
         input_key = f"{method.__qualname__}:inputs"
         output_key = f"{method.__qualname__}:outputs"
 
-        # Store input arguments in Redis
+        # Sending the input in the redis list
         self._redis.rpush(input_key, str(args))
 
-        # Execute the original method and capture the output
+        # now call the original function and save the result
         result = method(self, *args, **kwargs)
 
-        # Store the output in Redis
+        # Then send the result to the redis output list
         self._redis.rpush(output_key, str(result))
 
         return result
