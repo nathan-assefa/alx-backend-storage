@@ -49,10 +49,6 @@ def replay(method: Callable):
     inputs = f"{method.__qualname__}:inputs"
     outputs = f"{method.__qualname__}:outputs"
 
-    """ the method.__self__ attribute refers to the instance
-    on which the method is called. This attribute provides a
-    reference to the instance itself, allowing you to access the
-    attributes and methods of that instance from within the method. """
     redis = method.__self__._redis
 
     count = redis.get(key).decode("utf-8")
