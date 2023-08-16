@@ -7,12 +7,33 @@ from typing import Union, Callable, Any
 
 
 def count_calls(method: Callable) -> Callable:
-    ''' implementing decorator '''
+    ''' A decorator that counts a function call'''
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         key = method.__qualname__
         self._redis.incr(key)
         return method(self, *args, **kwargs)
+    return wrapper
+
+
+def call_history(method: Callable) -> Callable:
+    ''' Adding input and output data in redis list '''
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        input_key = f"{method.__qualname__}:inputs"
+        output_key = f"{method.__qualname__}:outputs"
+
+        # Store input arguments in Redis
+        self._redis.rpush(input_key, str(args))
+
+        # Execute the original method and capture the output
+        result = method(self, *args, **kwargs)
+
+        # Store the output in Redis
+        self._redis.rpush(output_key, str(result))
+
+        return result
+
     return wrapper
 
 
@@ -22,6 +43,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
     
+    @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """ storing key value pair in the redis serever """
