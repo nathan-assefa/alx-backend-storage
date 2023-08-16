@@ -3,21 +3,25 @@ import redis
 import uuid
 from functools import wraps
 from typing import Union, Callable, Any
+
 """ Basic operations of redis """
 
 
 def count_calls(method: Callable) -> Callable:
-    ''' A decorator that counts a function call'''
+    """A decorator that counts a function call"""
+
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         key = method.__qualname__
         self._redis.incr(key)
         return method(self, *args, **kwargs)
+
     return wrapper
 
 
 def call_history(method: Callable) -> Callable:
-    ''' Sending datas to redis using RPUSH '''
+    """Sending datas to redis using RPUSH"""
+
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         # let us first compile the keys
@@ -39,18 +43,18 @@ def call_history(method: Callable) -> Callable:
 
 
 def replay(method: Callable):
-    ''' display the history of calls of a particular function '''
+    """display the history of calls of a particular function"""
     key = method.__qualname__
 
     inputs = f"{method.__qualname__}:inputs"
     outputs = f"{method.__qualname__}:outputs"
 
-    ''' the method.__self__ attribute refers to the instance
+    """ the method.__self__ attribute refers to the instance
     on which the method is called. This attribute provides a
     reference to the instance itself, allowing you to access the
-    attributes and methods of that instance from within the method. '''
+    attributes and methods of that instance from within the method. """
     redis = method.__self__._redis
-    
+
     count = redis.get(key).decode("utf-8")
     print("{} was called {} times:".format(key, count))
     inputList = redis.lrange(inputs, 0, -1)
@@ -61,20 +65,21 @@ def replay(method: Callable):
         attr, data = a.decode("utf-8"), b.decode("utf-8")
         print("{}(*{}) -> {}".format(key, attr, data))
 
+
 class Cache:
     def __init__(self):
-        """ intializing attributes """
+        """intializing attributes"""
         self._redis = redis.Redis()
         self._redis.flushdb()
-    
+
     @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
-        """ storing key value pair in the redis serever """
+        """storing key value pair in the redis serever"""
         random_key = str(uuid.uuid4())
         self._redis.set(random_key, data)
         return random_key
-    
+
     def get(self, key: str, fn: Callable = None) -> (Any, None):
         value = self._redis.get(key)
         if value and fn:
